@@ -1,3 +1,5 @@
+#! python -V:3.12
+
 #if packages cannot resolve please remember to install the packages using pip
 import numpy as np
 import tensorflow as tf
@@ -22,3 +24,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
   batch_size=batch_size
 )
 
+<<<<<<< HEAD
+=======
+print("Path to dataset files:", path)
+>>>>>>> 5ff0ce4cd96ddcfa16aa83def6924e61fd0ee512
