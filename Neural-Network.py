@@ -1,4 +1,4 @@
-#! python -V:3.12
+#! python
 
 #if packages cannot resolve please remember to install the packages using pip
 import numpy as np
