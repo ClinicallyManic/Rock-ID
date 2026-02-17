@@ -23,4 +23,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
   image_size=(img_height, img_width),
   batch_size=batch_size
 )
+<<<<<<< HEAD
 
+=======
+>>>>>>> 23ad704089127ce71f1f7c1d82e7388704ad214d
