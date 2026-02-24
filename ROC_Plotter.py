@@ -4,7 +4,8 @@ from sklearn.preprocessing import label_binarize
 from sklearn.metrics import roc_curve, auc
 import matplotlib.pyplot as plt
 
-#code grom copilot, needs to be worked out to see if it works
+# code from copilot, needs to be worked out to see if it works
+# function needs to be passed test data set and tensorflow model
 def PlotROC(test_ds, model):
 
     # Extract all labels and images from the test dataset
