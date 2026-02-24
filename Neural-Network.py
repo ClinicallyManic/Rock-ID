@@ -48,9 +48,6 @@ def dataset_creation():
 
 train_ds, test_ds = dataset_creation()
 
-import matplotlib.pyplot as plt
-import tensorflow as tf
-
 #Get the class names (so we see "cat" instead of "0")
 class_names = train_ds.class_names
 
@@ -61,7 +58,7 @@ for images, labels in train_ds.take(1):
     #Create a figure (10x10 inches)
     plt.figure(figsize=(10, 10))
     
-    #Loop through the first 9 images in the batch
+    #Loop through the first 16 images in the batch
     for i in range(16):
         ax = plt.subplot(4, 4, i + 1)
         
