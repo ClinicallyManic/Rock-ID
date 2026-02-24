@@ -51,6 +51,24 @@ def dataset_creation():
 
 train_ds, test_ds = dataset_creation()
 
+model = tf.keras.Sequential([
+	tf.keras.layers.Flatten(input_shape=(512, 512, 3)),
+    tf.keras.layers.Dense(128, activation='relu'),
+	tf.keras.layers.Dense(53)
+])
+
+model.compile(optimizer='adam',
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+			  metrics=['accuracy'],
+			  )
+
+model.fit(train_ds, epochs=10)
+
+probability_model = tf.keras.Sequential([model,
+                                         tf.keras.layers.Softmax()])
+
+predictions = probability_model.predict(test_ds)
+
 #if you want to verify the classes are correctly generating uncomment following 2 lines
 #class_names = train_ds.class_names
 #print("Found these classes:", class_names)
