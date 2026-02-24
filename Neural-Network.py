@@ -13,68 +13,52 @@ import kagglehub
 
 #Function creates the training and validation datasets and returns aforementioned datasets
 def dataset_creation():
-  # Download latest version also concatenate \\rocks to the end to end up in the correct directory
-  path = kagglehub.dataset_download("neelgajare/rocks-dataset")
-  path+= "\\rocks"
-  #print("Path to dataset files:", path) #commented out for brevity maintained for so we can check
-  
-  #code nicked from google gemini because the relavant kaggle tutorial is bad
-  batch_size = 32
-  img_height = 512   #Sizes are overkilled because I am lazy and its easier then dynamically loading images by alot
-  img_width = 512
-  
-  #training Dataset reserves 20% of dataset for validation
-  train_ds = tf.keras.utils.image_dataset_from_directory(
-    path,
-    validation_split=0.2,
-    subset="training",
-    seed=123,
-    image_size=(img_height, img_width),
-    batch_size=batch_size
-  )
-  
-  #validation dataset uses 20% of dataset to make sure we train right
-  val_ds = tf.keras.utils.image_dataset_from_directory(
-    path,
-    validation_split=0.2,
-    subset="validation",
-    seed=123,
-    image_size=(img_height, img_width),
-    batch_size=batch_size
-  )
+	# Download latest version also concatenate \\rocks to the end to end up in the correct directory
+	path = kagglehub.dataset_download("neelgajare/rocks-dataset")
+	path+= "\\rocks"
+	#print("Path to dataset files:", path) #commented out for brevity maintained for so we can check
 
-  #returns training and validation sets
-  return train_ds, val_ds
+	#code nicked from google gemini because the relavant kaggle tutorial is bad
+	batch_size = 32
+	img_height = 512   #Sizes are overkilled because I am lazy and its easier then dynamically loading images by alot
+	img_width = 512
+
+	#training Dataset reserves 20% of dataset for validation
+	train_ds = tf.keras.utils.image_dataset_from_directory(
+	path,
+	validation_split=0.2,
+	subset="training",
+	seed=123,
+	image_size=(img_height, img_width),
+	batch_size=batch_size
+	)
+
+	#validation dataset uses 20% of dataset to make sure we train right
+	val_ds = tf.keras.utils.image_dataset_from_directory(
+		path,
+		validation_split=0.2,
+		subset="validation",
+		seed=123,
+		image_size=(img_height, img_width),
+		batch_size=batch_size
+	)
+
+  	#returns training and validation sets
+	return train_ds, val_ds
+
+#Sub-function of bargraph for counting inside of labels
+def count(dataset):
+	
+	return count
+
+#Trying to make a bar graph detailing classes in testing and training set
+def bar_graph(train,test):
+
+
 
 train_ds, test_ds = dataset_creation()
 
-#Get the class names (so we see "cat" instead of "0")
-class_names = train_ds.class_names
 
-#Take a single batch from the dataset
-#.take(1) ensures we don't try to loop through the entire dataset
-for images, labels in train_ds.take(1):
-    
-    #Create a figure (10x10 inches)
-    plt.figure(figsize=(10, 10))
-    
-    #Loop through the first 16 images in the batch
-    for i in range(16):
-        ax = plt.subplot(4, 4, i + 1)
-        
-        # Display the image
-        # .numpy().astype("uint8") converts the tensor values (float) back to integers (0-255)
-        plt.imshow(images[i].numpy().astype("uint8"))
-        
-        # Display the label
-        # labels[i] is an integer (e.g., 0), class_names converts it to string (e.g., "cat")
-        plt.title(class_names[labels[i]])
-        
-        # Turn off axis coordinates for a cleaner look
-        plt.axis("off")
-
-# Show the plot
-plt.show()
 
 
 #if you want to verify the classes are correctly generating uncomment following 2 lines
