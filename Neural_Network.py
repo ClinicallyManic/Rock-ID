@@ -22,35 +22,27 @@ def dataset_creation():
 	#print("Path to dataset files:", path) #commented out for brevity maintained for so we can check
 
 	#code nicked from google gemini because the relavant kaggle tutorial is bad
-	batch_size = 32
 	img_height = 512   #Sizes are overkilled because I am lazy and its easier then dynamically loading images by alot
 	img_width = 512
 
 	#training Dataset reserves 20% of dataset for validation
-	train_ds = tf.keras.utils.image_dataset_from_directory(
+	dataset_tuple = tf.keras.utils.image_dataset_from_directory(
 	path,
 	validation_split=0.2,
-	subset="training",
+	subset="both",
 	seed=123,
+	label_mode="categorical",
 	image_size=(img_height, img_width),
-	batch_size=batch_size
 	)
 
-	#validation dataset uses 20% of dataset to make sure we train right
-	val_ds = tf.keras.utils.image_dataset_from_directory(
-		path,
-		validation_split=0.2,
-		subset="validation",
-		seed=123,
-		image_size=(img_height, img_width),
-		batch_size=batch_size
-	)
-
-  	#returns training and validation sets
-	return train_ds, val_ds
+  	#returns training and validation sets as a tuple
+	return dataset_tuple
 
 train_ds, test_ds = dataset_creation()
 
 #if you want to verify the classes are correctly generating uncomment following 2 lines
-#class_names = train_ds.class_names
-#print("Found these classes:", class_names)
+#class_names = train_ds.class_names, test_ds.class_names
+#for i in range(len(class_names)):
+#	if class_names[0][i] != class_names[1][i]:
+#		print("break")
+#		break
