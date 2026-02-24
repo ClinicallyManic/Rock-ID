@@ -1,5 +1,8 @@
 #! python
 
+from dotenv import load_dotenv
+load_dotenv("removewarnings.env")
+
 #if packages cannot resolve please remember to install the packages using pip
 import numpy as np
 import tensorflow as tf
