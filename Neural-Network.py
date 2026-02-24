@@ -46,7 +46,39 @@ def dataset_creation():
   #returns training and validation sets
   return train_ds, val_ds
 
-dataset_creation()
+train_ds, test_ds = dataset_creation()
+
+import matplotlib.pyplot as plt
+import tensorflow as tf
+
+#Get the class names (so we see "cat" instead of "0")
+class_names = train_ds.class_names
+
+#Take a single batch from the dataset
+#.take(1) ensures we don't try to loop through the entire dataset
+for images, labels in train_ds.take(1):
+    
+    #Create a figure (10x10 inches)
+    plt.figure(figsize=(10, 10))
+    
+    #Loop through the first 9 images in the batch
+    for i in range(16):
+        ax = plt.subplot(4, 4, i + 1)
+        
+        # Display the image
+        # .numpy().astype("uint8") converts the tensor values (float) back to integers (0-255)
+        plt.imshow(images[i].numpy().astype("uint8"))
+        
+        # Display the label
+        # labels[i] is an integer (e.g., 0), class_names converts it to string (e.g., "cat")
+        plt.title(class_names[labels[i]])
+        
+        # Turn off axis coordinates for a cleaner look
+        plt.axis("off")
+
+# Show the plot
+plt.show()
+
 
 #if you want to verify the classes are correctly generating uncomment following 2 lines
 #class_names = train_ds.class_names
