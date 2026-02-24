@@ -46,20 +46,7 @@ def dataset_creation():
   	#returns training and validation sets
 	return train_ds, val_ds
 
-#Sub-function of bargraph for counting inside of labels
-def count(dataset):
-	
-	return count
-
-#Trying to make a bar graph detailing classes in testing and training set
-def bar_graph(train,test):
-
-
-
 train_ds, test_ds = dataset_creation()
-
-
-
 
 #if you want to verify the classes are correctly generating uncomment following 2 lines
 #class_names = train_ds.class_names
