@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import kagglehub
+import Neural_Network as NN
 
 def display_chart(gini, kappa, f1, epochs):
     fig, ax = plt.subplots()
@@ -70,3 +71,4 @@ def f1_score(y, verification):
     n_samples = len(y)
     scores = get_abcd(y, verification)
     return (2 * scores[0]) / ((2*scores[0]) + scores[1] + scores[2])
+
