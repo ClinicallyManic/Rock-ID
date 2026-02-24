@@ -1,5 +1,8 @@
 #! python
 
+from dotenv import load_dotenv
+load_dotenv("removewarnings.env")
+
 #if packages cannot resolve please remember to install the packages using pip
 import numpy as np
 import tensorflow as tf
@@ -17,12 +20,12 @@ def dataset_creation():
   path = kagglehub.dataset_download("neelgajare/rocks-dataset")
   path+= "\\rocks"
   #print("Path to dataset files:", path) #commented out for brevity maintained for so we can check
-  
+
   #code nicked from google gemini because the relavant kaggle tutorial is bad
   batch_size = 32
   img_height = 512   #Sizes are overkilled because I am lazy and its easier then dynamically loading images by alot
   img_width = 512
-  
+
   #training Dataset reserves 20% of dataset for validation
   train_ds = tf.keras.utils.image_dataset_from_directory(
     path,
@@ -32,7 +35,7 @@ def dataset_creation():
     image_size=(img_height, img_width),
     batch_size=batch_size
   )
-  
+
   #validation dataset uses 20% of dataset to make sure we train right
   val_ds = tf.keras.utils.image_dataset_from_directory(
     path,
@@ -45,6 +48,7 @@ def dataset_creation():
 
   #returns training and validation sets
   return train_ds, val_ds
+
 
 dataset_creation()
 

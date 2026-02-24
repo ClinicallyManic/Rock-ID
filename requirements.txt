@@ -3,3 +3,4 @@ tensorflow
 types-tensorflow
 matplotlib
 kagglehub
+dotenv
