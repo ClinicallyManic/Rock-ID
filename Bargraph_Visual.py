@@ -23,7 +23,7 @@ def count(dataset):
 	return count
 
 #Trying to make a bar graph detailing classes in testing and training set to demonstrate imbalance
-def bar_graph(train,test):
+def imbalance_bar_graph(train,test):
 	train_counted = count(train)
 	test_counted = count(test)
 
@@ -43,4 +43,4 @@ def bar_graph(train,test):
 	ax.legend()
 	plt.show()
 
-bar_graph(NN.train_ds, NN.test_ds)
+imbalance_bar_graph(NN.train_ds, NN.test_ds)
