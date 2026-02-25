@@ -27,5 +27,20 @@ def bar_graph(train,test):
 	train_counted = count(train)
 	test_counted = count(test)
 
-count(NN.train_ds)
-#bar_graph(NN.train_ds, NN.test_ds)
+	labels = list(train_counted.keys()) 
+	values_A = list(train_counted.values())
+	values_B = list(test_counted.values())
+
+	fig, ax = plt.subplots()
+
+	#Plots the dictionaries on graph
+	ax.bar(labels, values_A, label='Training set', color='skyblue')
+	ax.bar(labels, values_B, bottom=values_A, label='Testing set', color=';avender')
+
+	#Adds labels and title
+	ax.set_ylabel('# of images in class')
+	ax.set_title('Class Imbalance')
+	ax.legend()
+	plt.show()
+
+bar_graph(NN.train_ds, NN.test_ds)
