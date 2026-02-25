@@ -25,7 +25,8 @@ def dataset_creation():
 	img_height = 512   #Sizes are overkilled because I am lazy and its easier then dynamically loading images by alot
 	img_width = 512
 
-	#training Dataset reserves 20% of dataset for validation
+	#validation split reserves 20% of dataset for validation
+	#dataset_tuple contains both the training and validation datasets at a 4:1 ratio this is done by subset="both"
 	dataset_tuple = tf.keras.utils.image_dataset_from_directory(
 	path,
 	validation_split=0.2,
@@ -39,24 +40,6 @@ def dataset_creation():
 	return dataset_tuple
 
 train_ds, test_ds = dataset_creation()
-
-model = tf.keras.Sequential([
-	tf.keras.layers.Flatten(input_shape=(512, 512, 3)),
-    tf.keras.layers.Dense(128, activation='relu'),
-	tf.keras.layers.Dense(53)
-])
-
-model.compile(optimizer='adam',
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-			  metrics=['accuracy'],
-			  )
-
-model.fit(train_ds, epochs=10)
-
-probability_model = tf.keras.Sequential([model,
-                                         tf.keras.layers.Softmax()])
-
-predictions = probability_model.predict(test_ds)
 
 #if you want to verify the classes are correctly generating uncomment following 2 lines
 #class_names = train_ds.class_names, test_ds.class_names
