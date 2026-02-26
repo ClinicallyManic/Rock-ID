@@ -34,8 +34,8 @@ def imbalance_bar_graph(train,test):
 	fig, ax = plt.subplots()
 
 	#Plots the dictionaries on graph
-	ax.bar(labels, values_A, label='Training set', color='skyblue')
-	ax.bar(labels, values_B, bottom=values_A, label='Testing set', color=';avender')
+	ax.bar(labels, values_A, label='Training set', color='purple')
+	ax.bar(labels, values_B, bottom=values_A, label='Testing set', color='skyblue')
 
 	#Adds labels and title
 	ax.set_ylabel('# of images in class')
