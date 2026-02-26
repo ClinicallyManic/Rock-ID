@@ -33,14 +33,16 @@ def imbalance_bar_graph(train,test):
 
 	fig, ax = plt.subplots()
 
-	#Plots the dictionaries on graph
-	ax.bar(labels, values_A, label='Training set', color='purple')
-	ax.bar(labels, values_B, bottom=values_A, label='Testing set', color='skyblue')
+	#Plots the dictionaries on graph horizontally
+	ax.barh(labels, values_A, label='Training set', color='purple')
+	ax.barh(labels, values_B, left=values_A, label='Testing set', color='skyblue')
 
 	#Adds labels and title
-	ax.set_ylabel('# of images in class')
-	ax.set_title('Class Imbalance')
+	ax.set_xlabel('Number of images in class')
+	ax.set_ylabel('Class')
+	ax.set_title('Class Imbalance')	
 	ax.legend()
+	plt.tight_layout()
 	plt.show()
 
 imbalance_bar_graph(NN.train_ds, NN.test_ds)
