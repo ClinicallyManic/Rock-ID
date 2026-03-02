@@ -8,6 +8,17 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import kagglehub
+import os.path
+
+import argparse
+
+parser = argparse.ArgumentParser(
+					prog='Neural Network',
+					description='A neural network that analizes rock images')
+
+parser.add_argument("-r", "--retrain", action="store_true")
+
+args = parser.parse_args()
 
 #TODO
 #Change seed to actually be random for final version set seed is fine for small scale testing
@@ -39,29 +50,38 @@ def dataset_creation():
 
 train_ds, test_ds = dataset_creation()
 
-#RandomContrast must go before flatten
-model = tf.keras.Sequential([
-	tf.keras.layers.RandomContrast(factor=0.5),
-	tf.keras.layers.Flatten(input_shape=(512, 512, 3)),
-	tf.keras.layers.Rescaling(1./255),
-    tf.keras.layers.Dense(128),
-	tf.keras.layers.Dense(108),
-	tf.keras.layers.Dense(72),
-	tf.keras.layers.Dense(64),
-	tf.keras.layers.Dense(53)
-])
+model = None
 
-model.compile(optimizer='adam',
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-			  metrics=['accuracy'],
-			  )
+if os.path.exists("./model/model.keras") and not args.retrain:
+	model = tf.keras.models.load_model("./model/model.keras")
+else:
+	#RandomContrast must go before flatten
+	model = tf.keras.Sequential([
+		tf.keras.layers.RandomContrast(factor=0.5),
+		tf.keras.layers.Flatten(input_shape=(512, 512, 3)),
+		tf.keras.layers.Rescaling(1./255),
+	    tf.keras.layers.Dense(128),
+		tf.keras.layers.Dense(108),
+		tf.keras.layers.Dense(72),
+		tf.keras.layers.Dense(64),
+		tf.keras.layers.Dense(53)
+	])
 
-model.fit(train_ds, epochs=10)
+	model.compile(optimizer='adam',
+	              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+				  metrics=['accuracy'],
+				  )
+
+	model.fit(train_ds, epochs=10)
+
+	model.save("./model/model.keras")
 
 probability_model = tf.keras.Sequential([model,
                                          tf.keras.layers.Softmax()])
 
 predictions = probability_model.predict(test_ds)
+
+model.summary()
 
 #if you want to verify the classes are correctly generating uncomment following 2 lines
 #class_names = train_ds.class_names, test_ds.class_names
