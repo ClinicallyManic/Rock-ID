@@ -52,6 +52,9 @@ train_ds, test_ds = dataset_creation()
 
 model = None
 
+if not os.path.exists("./model/"):
+	os.makedirs("./model/")
+
 if os.path.exists("./model/model.keras") and not args.retrain:
 	model = tf.keras.models.load_model("./model/model.keras")
 else:
@@ -72,6 +75,7 @@ else:
 				  metrics=['accuracy'],
 				  )
 
+	# time_start = 
 	model.fit(train_ds, epochs=10)
 
 	model.save("./model/model.keras")
