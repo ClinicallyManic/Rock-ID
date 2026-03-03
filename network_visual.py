@@ -1,8 +1,11 @@
+from dotenv import load_dotenv
+load_dotenv("removewarnings.env")
+
 import tensorflow as tf
 from keras_visualizer import visualizer
 
 my_settings = {
-    'MAX_NEURONS': None,
+    'MAX_NEURONS': 53,
     'INPUT_DENSE_COLOR': 'teal',
     'HIDDEN_DENSE_COLOR': 'gray',
     'OUTPUT_DENSE_COLOR': 'crimson'

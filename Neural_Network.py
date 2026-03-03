@@ -70,14 +70,22 @@ else:
 		tf.keras.layers.Dense(53)
 	])
 
-	checkpoint = tf.keras.callbacks.ModelCheckpoint("./model/best_run.h5", save_best_only = True, monitor='val_loss', mode='min')
+	# cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver(
+	# tpu='/TPU:0')
+	# tf.config.experimental_connect_to_cluster(cluster_resolver)
+	# tf.tpu.experimental.initialize_tpu_system(cluster_resolver)
+	# print("All devices: ", tf.config.list_logical_devices('TPU'))
+	# exit()
+	# tpu_strategy = tf.distribute.TPUStrategy(cluster_resolver)
+
+	checkpoint = tf.keras.callbacks.ModelCheckpoint("./model/best_run.keras", save_best_only = True, monitor='val_accuracy', mode='max')
 
 	model.compile(optimizer='adam',
 	              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
 				  metrics=['accuracy'],
 				  )
 
-	model.fit(train_ds, epochs=1000, callbacks=[checkpoint])
+	model.fit(train_ds, epochs=10, callbacks=[checkpoint])
 
 	model.save("./model/model.keras")
 
