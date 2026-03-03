@@ -34,8 +34,8 @@ def Plot_AccurateVTotal():
     #Graphing
     fig, ax = plt.subplots()
     fig.set_size_inches(8,7)
-    ax.barh(test_labels, test_totals - tp, label='Total - TP - TN', color='purple')
-    ax.barh(test_labels, tp, label='TP + TN', left=test_totals - tp, color='skyblue')
+    ax.barh(test_labels, test_totals - tp, label='Total - TP', color='purple')
+    ax.barh(test_labels, tp, label='TP', left=test_totals - tp, color='skyblue')
     ax.set_xlabel('Number of images in class')
     ax.set_ylabel('Class')
     ax.set_title("Accurate Predictions VS. Total")
