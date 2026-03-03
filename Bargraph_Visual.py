@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
 import kagglehub
 import Neural_Network as NN
@@ -15,11 +16,12 @@ def count(dataset):
 
 	#image is unused do not change this
 	#this loop counts increments the value of a key
-	dataset = dataset.unbatch()
-	for image, label in dataset:
-		for i in range(name_count):
-			if label[i] == 1:
-				count[names[i]]+=1
+	np_dataset = tfds.as_numpy(dataset.unbatch())
+	labels = []
+	for image, label in np_dataset:
+		labels.append(label)
+	for i in labels:
+		count[names[i]] += 1
 	return count
 
 #Trying to make a bar graph detailing classes in testing and training set to demonstrate imbalance
