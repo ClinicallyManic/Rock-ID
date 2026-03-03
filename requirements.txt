@@ -4,3 +4,4 @@ types-tensorflow
 matplotlib
 kagglehub
 dotenv
+keras_visualizer

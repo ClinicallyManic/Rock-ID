@@ -70,13 +70,14 @@ else:
 		tf.keras.layers.Dense(53)
 	])
 
+	checkpoint = tf.keras.callbacks.ModelCheckpoint("./model/best_run.h5", save_best_only = True, monitor='val_loss', mode='min')
+
 	model.compile(optimizer='adam',
 	              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
 				  metrics=['accuracy'],
 				  )
 
-	# time_start = 
-	model.fit(train_ds, epochs=10)
+	model.fit(train_ds, epochs=1000, callbacks=[checkpoint])
 
 	model.save("./model/model.keras")
 
