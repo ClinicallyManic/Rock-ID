@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 import kagglehub
 import Neural_Network as NN
 
-def display_chart(gini, kappa, f1, epochs):
+def display_chart(gini, kappa, f1):
     fig, ax = plt.subplots()
     scores = ['gini', 'kappa', 'f1']
     counts = [gini, kappa, f1]
     bar_colors = ['tab:green', 'tab:orange', 'tab:red']
     ax.bar(scores, counts, color=bar_colors)
     ax.set_ylabel('Accuracy')
-    ax.set_title('Accuracy scores of measuring methods over ' + epochs + ' epochs')
+    ax.set_title('Accuracy scores of measuring methods')
     plt.show()
 
 
@@ -28,35 +28,35 @@ def gini_impurity(y):
 
 # scores[0] = a = TP, scores[1] = b = FP, scores[2] = c = FN, scores[3] = d = TN
 def get_abcd(y, verification):
-    classes = np.unique(y)
-    control = np.unique(verification)
+    classes = np.unique(verification)
     n_samples = len(y)
+    n_ver = len(verification)
     result = [0, 0, 0, 0]
-    for ii in range(0, n_samples):
-        p = np.sum(y == classes[ii])
-        q = np.sum(verification == control[ii])
+    for cls in classes:
+        p = np.sum(y == cls)
+        q = np.sum(verification == cls)
         pnot = n_samples - p
-        qnot = n_samples - q
+        qnot = n_ver - q
         
         dif_positive = abs(q - p)
         dif_negative = abs(qnot - pnot)
+
 
         if p < q:
             result[0] += p
         else:
             result[0] += q
 
-        if pnot < qnot:
-            result[3] += pnot
-        else:
-            result[3] += qnot
         result[1] += dif_positive
         result[2] += dif_negative
+
+        result[3] = 1 - (result[0] + dif_positive + dif_negative)
 
     return result
 
 def kappa_score(y, verification):
     n_samples = len(y)
+    n_ver = len(verification)
     scores = get_abcd(y, verification)
     po = (scores[0] + scores[3]) / n_samples
     pc = ((scores[0] + scores[1]) / n_samples) * ((scores[0] + scores[2]) / n_samples)
@@ -72,3 +72,8 @@ def f1_score(y, verification):
     scores = get_abcd(y, verification)
     return (2 * scores[0]) / ((2*scores[0]) + scores[1] + scores[2])
 
+train_ds, test_ds = NN.dataset_creation()
+gini = gini_impurity(test_ds)
+kappa = kappa_score(test_ds, train_ds)
+f1 = f1_score(test_ds, train_ds)
+display_chart(gini, kappa, f1)
