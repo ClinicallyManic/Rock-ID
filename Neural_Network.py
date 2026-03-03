@@ -9,7 +9,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import kagglehub
 import os.path
-
+import random as r
 import argparse
 
 parser = argparse.ArgumentParser(
@@ -41,7 +41,7 @@ def dataset_creation():
 	path,
 	validation_split=0.2,
 	subset="both",
-	seed=123,
+	seed=r.randint(0,9999),
 	image_size=(img_height, img_width),
 	)
 
@@ -77,7 +77,7 @@ else:
 				  metrics=['accuracy'],
 				  )
 
-	model.fit(train_ds, epochs=1000, callbacks=[checkpoint])
+	model.fit(train_ds, epochs=10, callbacks=[checkpoint])
 
 	model.save("./model/model.keras")
 
