@@ -12,6 +12,8 @@ import os.path
 
 import argparse
 
+import ROC_Plotter as ROC
+
 parser = argparse.ArgumentParser(
 					prog='Neural Network',
 					description='A neural network that analizes rock images')
@@ -87,6 +89,8 @@ probability_model = tf.keras.Sequential([model,
 predictions = probability_model.predict(test_ds)
 
 model.summary()
+
+ROC.PlotROC(test_ds, model)
 
 #if you want to verify the classes are correctly generating uncomment following 2 lines
 #class_names = train_ds.class_names, test_ds.class_names
