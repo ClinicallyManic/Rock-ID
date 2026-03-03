@@ -1,6 +1,8 @@
 numpy
 tensorflow
+tensorflow-datasets
 types-tensorflow
 matplotlib
 kagglehub
 dotenv
+keras_visualizer

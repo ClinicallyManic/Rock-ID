@@ -1,6 +1,10 @@
 # Neural network model
 model/
 
+# Visualization files
+graph
+*.png
+
 # Atom/Pulsar
 .atom/
 
