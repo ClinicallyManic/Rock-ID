@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 # function needs to be passed test data set and tensorflow model
 def PlotROC(test_ds, model):
 
+    test_names = test_ds.class_names
     # Extract all labels and images from the test dataset
     y_true = []
     X_test = []
@@ -41,12 +42,14 @@ def PlotROC(test_ds, model):
         plt.plot(
             fpr[i],
             tpr[i],
-            label=f"Class {i} (AUC = {roc_auc[i]:.2f})"
+            label=f"{test_names[i]} (AUC = {roc_auc[i]:.2f})"
         )
 
     plt.plot([0, 1], [0, 1], "k--", label="Random guess")
     plt.xlabel("False Positive Rate")
     plt.ylabel("True Positive Rate")
     plt.title("Multiclass ROC Curve (One-vs-Rest)")
-    plt.legend(loc="lower right")
+    #bbox_to_anchor(x, y, width, height) (all relative).
+    #You will likely need to fiddle with the numbers for your individual monitor size
+    plt.legend(loc="lower right", bbox_to_anchor=(1.5, 0, 0, 0.5), ncol=2)
     plt.show()

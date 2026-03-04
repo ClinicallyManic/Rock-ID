@@ -22,11 +22,6 @@ parser.add_argument("-r", "--retrain", action="store_true")
 
 args = parser.parse_args()
 
-#TODO
-#Change seed to actually be random for final version set seed is fine for small scale testing
-#Make neural network to process dataset confer with group for details
-#Remove commented code for final version
-
 #Function creates the training and validation datasets and returns aforementioned datasets
 def dataset_creation():
 	# Download latest version also concatenate \\rocks to the end to end up in the correct directory
@@ -72,29 +67,22 @@ else:
 		tf.keras.layers.Dense(53)
 	])
 
-	checkpoint = tf.keras.callbacks.ModelCheckpoint("./model/best_run.h5", save_best_only = True, monitor='val_loss', mode='min')
-
 	model.compile(optimizer='adam',
 	              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
 				  metrics=['accuracy'],
 				  )
 
-	model.fit(train_ds, epochs=10, callbacks=[checkpoint])
+	checkpoint = tf.keras.callbacks.ModelCheckpoint("./model/model.keras", save_best_only = True, monitor='loss', mode='min', verbose=1)
+
+	model.fit(train_ds, epochs=62, callbacks=[checkpoint])
 
 	model.save("./model/model.keras")
 
 probability_model = tf.keras.Sequential([model,
-                                         tf.keras.layers.Softmax()])
+                                        tf.keras.layers.Softmax()])
 
 predictions = probability_model.predict(test_ds)
 
 model.summary()
 
 ROC.PlotROC(test_ds, model)
-
-#if you want to verify the classes are correctly generating uncomment following 2 lines
-#class_names = train_ds.class_names, test_ds.class_names
-#for i in range(len(class_names)):
-#	if class_names[0][i] != class_names[1][i]:
-#		print("break")
-#		break
