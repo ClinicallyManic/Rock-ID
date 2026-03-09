@@ -38,7 +38,7 @@ def dataset_creation():
 	path,
 	validation_split=0.2,
 	subset="both",
-	seed=r.randint(0,9999),
+	seed=6967,
 	image_size=(img_height, img_width),
 	)
 
