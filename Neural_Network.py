@@ -9,8 +9,10 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import kagglehub
 import os.path
-
+import random as r
 import argparse
+
+import ROC_Plotter as ROC
 
 parser = argparse.ArgumentParser(
 					prog='Neural Network',
@@ -19,11 +21,6 @@ parser = argparse.ArgumentParser(
 parser.add_argument("-r", "--retrain", action="store_true")
 
 args = parser.parse_args()
-
-#TODO
-#Change seed to actually be random for final version set seed is fine for small scale testing
-#Make neural network to process dataset confer with group for details
-#Remove commented code for final version
 
 #Function creates the training and validation datasets and returns aforementioned datasets
 def dataset_creation():
@@ -41,7 +38,7 @@ def dataset_creation():
 	path,
 	validation_split=0.2,
 	subset="both",
-	seed=123,
+	seed=r.randint(0,9999),
 	image_size=(img_height, img_width),
 	)
 
@@ -70,35 +67,20 @@ else:
 		tf.keras.layers.Dense(53)
 	])
 
-	# cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver(
-	# tpu='/TPU:0')
-	# tf.config.experimental_connect_to_cluster(cluster_resolver)
-	# tf.tpu.experimental.initialize_tpu_system(cluster_resolver)
-	# print("All devices: ", tf.config.list_logical_devices('TPU'))
-	# exit()
-	# tpu_strategy = tf.distribute.TPUStrategy(cluster_resolver)
-
-	checkpoint = tf.keras.callbacks.ModelCheckpoint("./model/best_run.keras", save_best_only = True, monitor='val_accuracy', mode='max')
-
 	model.compile(optimizer='adam',
 	              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
 				  metrics=['accuracy'],
 				  )
 
-	model.fit(train_ds, epochs=10, callbacks=[checkpoint])
+	checkpoint = tf.keras.callbacks.ModelCheckpoint("./model/model.keras", save_best_only = True, monitor='loss', mode='min', verbose=1)
 
-	model.save("./model/model.keras")
+	model.fit(train_ds, epochs=62, callbacks=[checkpoint])
 
 probability_model = tf.keras.Sequential([model,
-                                         tf.keras.layers.Softmax()])
+                                        tf.keras.layers.Softmax()])
 
 predictions = probability_model.predict(test_ds)
 
 model.summary()
 
-#if you want to verify the classes are correctly generating uncomment following 2 lines
-#class_names = train_ds.class_names, test_ds.class_names
-#for i in range(len(class_names)):
-#	if class_names[0][i] != class_names[1][i]:
-#		print("break")
-#		break
+ROC.PlotROC(test_ds, model)
