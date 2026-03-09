@@ -72,9 +72,9 @@ else:
 				  metrics=['accuracy'],
 				  )
 
-	checkpoint = tf.keras.callbacks.ModelCheckpoint("./model/model.keras", save_best_only = True, monitor='loss', mode='min', verbose=1)
+	checkpoint = tf.keras.callbacks.ModelCheckpoint("./model/model.keras", save_best_only = True, monitor='accuracy', mode='max', verbose=1)
 
-	model.fit(train_ds, epochs=62, callbacks=[checkpoint])
+	model.fit(train_ds, epochs=10, callbacks=[checkpoint])
 
 probability_model = tf.keras.Sequential([model,
                                         tf.keras.layers.Softmax()])

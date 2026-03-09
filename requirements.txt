@@ -6,3 +6,4 @@ matplotlib
 kagglehub
 dotenv
 keras_visualizer
+scikit-learn
