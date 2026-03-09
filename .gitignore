@@ -5,6 +5,10 @@ model/
 graph
 *.png
 
+# Output files
+output.txt
+error.txt
+
 # Atom/Pulsar
 .atom/
 
