@@ -11,9 +11,14 @@ def display_chart(gini, kappa, f1):
     bar_colors = ['tab:green', 'tab:orange', 'tab:red']
     ax.bar(scores, counts, color=bar_colors)
     ax.set_ylabel('Accuracy')
-    ax.set_title('Accuracy scores of measuring methods')
+    ax.set_title('Accuracy scores of measuring methods over 42 epochs')
     plt.show()
 
+def extract_labels(dataset):
+    labels = []
+    for images, lbls in dataset:
+        labels.extend(lbls.numpy())  
+    return np.array(labels)
 
 def gini_impurity(y):
     classes = np.unique(y)
@@ -27,31 +32,15 @@ def gini_impurity(y):
     return gini
 
 # scores[0] = a = TP, scores[1] = b = FP, scores[2] = c = FN, scores[3] = d = TN
-def get_abcd(y, verification):
-    classes = np.unique(verification)
-    n_samples = len(y)
-    n_ver = len(verification)
+def get_abcd(y_true, ver_true):
+    classes = np.unique(np.concatenate([y_true, ver_true]))
     result = [0, 0, 0, 0]
     for cls in classes:
-        p = np.sum(y == cls)
-        q = np.sum(verification == cls)
-        pnot = n_samples - p
-        qnot = n_ver - q
-        
-        dif_positive = abs(q - p)
-        dif_negative = abs(qnot - pnot)
-
-
-        if p < q:
-            result[0] += p
-        else:
-            result[0] += q
-
-        result[1] += dif_positive
-        result[2] += dif_negative
-
-        result[3] = 1 - (result[0] + dif_positive + dif_negative)
-
+        result[0] += np.sum((y_true == cls) & (ver_true == cls))
+        result[1] += np.sum((y_true == cls) & (ver_true != cls))
+        result[2] += np.sum((y_true != cls) & (ver_true == cls))
+        result[3] += np.sum((y_true != cls) & (ver_true != cls))
+    print(result)
     return result
 
 def kappa_score(y, verification):
@@ -72,8 +61,16 @@ def f1_score(y, verification):
     scores = get_abcd(y, verification)
     return (2 * scores[0]) / ((2*scores[0]) + scores[1] + scores[2])
 
-train_ds, test_ds = NN.dataset_creation()
+
+# train_ds, test_ds = NN.dataset_creation()
+test_ds = NN.test_ds
+y_true = extract_labels(NN.test_ds)
+
+y_pred_probs = NN.probability_model.predict(NN.test_ds)
+y_pred = np.argmax(y_pred_probs, axis=1)
+
 gini = gini_impurity(test_ds)
-kappa = kappa_score(test_ds, train_ds)
-f1 = f1_score(test_ds, train_ds)
+kappa = kappa_score(y_pred, y_true)
+f1 = f1_score(y_pred, y_true)
 display_chart(gini, kappa, f1)
+

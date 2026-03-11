@@ -5,5 +5,5 @@ types-tensorflow
 matplotlib
 kagglehub
 dotenv
-keras_visualizer
+visualkeras
 scikit-learn

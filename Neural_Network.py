@@ -82,5 +82,6 @@ probability_model = tf.keras.Sequential([model,
 predictions = probability_model.predict(test_ds)
 
 model.summary()
+model.get_metrics_result()
 
-ROC.PlotROC(test_ds, model)
+# ROC.PlotROC(test_ds, model)
