@@ -15,35 +15,36 @@ def count(dataset):
         counts += batch_counts 
     return counts
 
-def Plot_AccurateVTotal():
-    test_labels = NN.test_ds.class_names
-    test_totals = count(NN.test_ds)
+def Plot_AccurateVInacc(dataset):
+    test_labels = dataset.class_names
+    test_totals = count(dataset)
     
     #Get true positives
     y_true = []
 
-    for _, labels in NN.test_ds:
+    for _, labels in dataset:
         y_true.append(labels.numpy())
 
     y_true = np.concatenate(y_true, axis=0)
 
-    logits = NN.model.predict(NN.test_ds)
+    logits = NN.model.predict(dataset)
     y_pred = np.argmax(logits, axis=1)
     cm = confusion_matrix(y_true, y_pred)
     tp = np.diag(cm)
     print(np.sum(tp)/np.sum(test_totals) * 100)
     #Graphing
     fig, ax = plt.subplots()
-    fig.set_size_inches(8,7)
-    ax.barh(test_labels, ((test_totals - tp)/test_totals) * 100, label='Total - TP', color='purple')
-    ax.barh(test_labels, (tp/test_totals) * 100, label='TP', left=((test_totals - tp)/test_totals) * 100, color='skyblue')
+    fig.set_size_inches(10,7)
+    ax.barh(test_labels, (tp/test_totals) * 100, label='TP', color='skyblue')
+    ax.barh(test_labels, ((test_totals - tp)/test_totals) * 100, label='Total-TP', left=(tp/test_totals) * 100, color='purple')
     ax.set_xlabel('%')
     ax.set_ylabel('Class')
     ax.set_xticks(np.linspace(0, 100, 11))
-    ax.set_title("Accurate Predictions VS. Total")
+    ax.set_title("Accurate Predictions VS. Inaccurate Predictions")
     ax.legend(bbox_to_anchor=(1,0.95))
-    plt.margins(x=1, y=0.01)
+    ax.margins(x=0)
+    plt.margins(y=0.01)
     plt.tight_layout()
     plt.show()
 
-Plot_AccurateVTotal()
+Plot_AccurateVInacc(NN.test_ds)
